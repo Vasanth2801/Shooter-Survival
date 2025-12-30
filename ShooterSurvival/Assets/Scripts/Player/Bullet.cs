@@ -34,9 +34,9 @@ public class Bullet : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Enemy"))
         {
+           UIManager.Instance.AddCoin();
+           gameObject.SetActive(false);   
             Destroy(other.gameObject);
-            gameObject.SetActive(false);
-            UIManager.Instance.AddCoin();
         }
         gameObject.SetActive(false);
     }

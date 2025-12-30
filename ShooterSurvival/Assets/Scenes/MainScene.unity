@@ -1708,9 +1708,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   waves:
   - enemies:
-    - {fileID: 991247680484675459, guid: aaf4bb06aefe9e54aa16872ce0a6b68a, type: 3}
-    - {fileID: 991247680484675459, guid: aaf4bb06aefe9e54aa16872ce0a6b68a, type: 3}
-    - {fileID: 991247680484675459, guid: aaf4bb06aefe9e54aa16872ce0a6b68a, type: 3}
+    - {fileID: 8870895188032516749, guid: aaf4bb06aefe9e54aa16872ce0a6b68a, type: 3}
+    - {fileID: 8870895188032516749, guid: aaf4bb06aefe9e54aa16872ce0a6b68a, type: 3}
+    - {fileID: 8870895188032516749, guid: aaf4bb06aefe9e54aa16872ce0a6b68a, type: 3}
     timeBetweenSpawns: 2
     timeBetweenWaves: 8
     enemiesCount: 0

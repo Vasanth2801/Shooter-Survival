@@ -6,6 +6,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] float enemySpeed = 3f;
     [SerializeField] Transform target;
 
+
+
     private void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").transform;

@@ -16,6 +16,9 @@ public class Player : MonoBehaviour
     [Header("Inputs")]
     [SerializeField] Vector2 movement;
 
+    [Header("Flipping Logic")]
+    [SerializeField] bool isFacingRight = true;
+
     private void Awake()
     {
         inputActions = new PlayerController();
@@ -41,6 +44,8 @@ public class Player : MonoBehaviour
     void Update()
     {
         Shoot();
+
+        Flip();
     }
 
     private void FixedUpdate()
@@ -59,6 +64,17 @@ public class Player : MonoBehaviour
         if(Input.GetMouseButtonDown(0))
         {
             poolManager.SpawnObjects("Bullet", firePoint.position, firePoint.rotation);
+        }
+    }
+
+    void Flip()
+    {
+        if(isFacingRight && movement.x < 0 || !isFacingRight && movement.x > 0)
+        {
+            isFacingRight = !isFacingRight;
+            Vector3 localScale = transform.localScale;
+            localScale.x *= -1;
+            transform.localScale = localScale;
         }
     }
 }
