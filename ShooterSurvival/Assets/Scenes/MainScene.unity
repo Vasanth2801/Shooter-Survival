@@ -702,13 +702,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   speed: 5
-  jumpForce: 9
+  jumpForce: 200
   isJumping: 0
+  dashSpeed: 10
+  dashCooldown: 1.5
+  dashDuration: 2
   rb: {fileID: 290173485}
   poolManager: {fileID: 651160903}
   firePoint: {fileID: 1982513227}
   movement: {x: 0, y: 0}
-  isFacingRight: 1
+  facingDirection: 1
   currentHealth: 0
   maxHealth: 100
   healthBar: {fileID: 686669702}

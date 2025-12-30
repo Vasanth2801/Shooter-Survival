@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,14 @@ public class Player : MonoBehaviour
     [Header("Jump Settings")]
     [SerializeField] float jumpForce = 9f;
     [SerializeField] bool isJumping = false;
+
+    [Header("Dash Settings")]
+    [SerializeField] private float dashSpeed = 7f;
+    [SerializeField] private float dashCooldown = 1.5f;
+    [SerializeField] private float dashDuration = 0.07f;
+    bool isDashing;
+    bool canDash = true;
+    bool dashPressed;
 
     [Header("References")]
     [SerializeField] Rigidbody2D rb;
@@ -22,7 +31,7 @@ public class Player : MonoBehaviour
     [SerializeField] Vector2 movement;
 
     [Header("Flipping Logic")]
-    [SerializeField] bool isFacingRight = true;
+    [SerializeField] int facingDirection = 1;
 
     [Header("Player Health")]
     [SerializeField] int currentHealth;
@@ -33,6 +42,7 @@ public class Player : MonoBehaviour
     {
         inputActions = new PlayerController();
         MovementCalling();
+        DashCalling();
     }
 
     void Start()
@@ -44,6 +54,11 @@ public class Player : MonoBehaviour
     {
         inputActions.Player.Move.performed += ctx => movement = ctx.ReadValue<Vector2>();
         inputActions.Player.Move.canceled += ctx => movement = Vector2.zero;
+    }
+
+    void DashCalling()
+    {
+        inputActions.Player.Dash.performed += ctx => dashPressed = true;
     }
 
     private void OnEnable()
@@ -60,7 +75,10 @@ public class Player : MonoBehaviour
     {
         Shoot();
 
-        Flip();
+        if (movement.x > 0 && transform.localScale.x < 0 || movement.x < 0 && transform.localScale.x > 0)
+        {
+            Flip();
+        }
 
         Jump();
 
@@ -69,7 +87,19 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isDashing)
+        {
+            return;
+        }
+
         HandleMovement();
+
+
+        if (canDash == true && dashPressed == true)
+        {
+            dashPressed = false;
+            StartCoroutine(Dash());
+        }
     }
 
     void HandleMovement()
@@ -95,15 +125,22 @@ public class Player : MonoBehaviour
         }
     }
 
+    IEnumerator Dash()
+    {
+        isDashing = true;
+        canDash = false;
+        rb.AddForce(movement * dashSpeed, ForceMode2D.Impulse);
+        yield return new WaitForSeconds(dashDuration);
+        rb.linearVelocity = Vector2.zero;
+        isDashing = false;
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
+    }
+
     void Flip()
     {
-        if(isFacingRight && movement.x < 0 || !isFacingRight && movement.x > 0)
-        {
-            isFacingRight = !isFacingRight;
-            Vector3 localScale = transform.localScale;
-            localScale.x *= -1;
-            transform.localScale = localScale;
-        }
+        facingDirection = 1;
+        transform.localScale = new Vector3(transform.localScale.x * -1,transform.localScale.y,transform.localScale.z);
     }
 
     void PlayerHealth()
