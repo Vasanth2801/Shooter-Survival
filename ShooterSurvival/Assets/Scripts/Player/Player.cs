@@ -1,9 +1,14 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     [Header("PlayerMovement")]
     [SerializeField] float speed = 5f;
+
+    [Header("Jump Settings")]
+    [SerializeField] float jumpForce = 9f;
+    [SerializeField] bool isJumping = false;
 
     [Header("References")]
     [SerializeField] Rigidbody2D rb;
@@ -19,10 +24,20 @@ public class Player : MonoBehaviour
     [Header("Flipping Logic")]
     [SerializeField] bool isFacingRight = true;
 
+    [Header("Player Health")]
+    [SerializeField] int currentHealth;
+    [SerializeField] int maxHealth;
+    public Image healthBar;
+
     private void Awake()
     {
         inputActions = new PlayerController();
         MovementCalling();
+    }
+
+    void Start()
+    {
+        currentHealth = maxHealth;
     }
 
     void MovementCalling()
@@ -46,6 +61,10 @@ public class Player : MonoBehaviour
         Shoot();
 
         Flip();
+
+        Jump();
+
+        PlayerHealth();
     }
 
     private void FixedUpdate()
@@ -57,6 +76,15 @@ public class Player : MonoBehaviour
     {
         Vector2 move = rb.position + movement * speed * Time.deltaTime;
         rb.MovePosition(move);
+    }
+
+    void Jump()
+    {
+        if(Input.GetKeyDown(KeyCode.Space) && !isJumping)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            isJumping = true;
+        }
     }
 
     void Shoot()
@@ -75,6 +103,19 @@ public class Player : MonoBehaviour
             Vector3 localScale = transform.localScale;
             localScale.x *= -1;
             transform.localScale = localScale;
+        }
+    }
+
+    void PlayerHealth()
+    {
+        healthBar.fillAmount = Mathf.Clamp(currentHealth/maxHealth,0, 1);
+    }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if(other.gameObject.CompareTag("Ground") && isJumping)
+        {
+            isJumping = false;
         }
     }
 }
