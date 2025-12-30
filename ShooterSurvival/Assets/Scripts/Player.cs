@@ -5,19 +5,20 @@ public class Player : MonoBehaviour
     [Header("PlayerMovement")]
     [SerializeField] float speed = 5f;
 
-
     [Header("References")]
     [SerializeField] Rigidbody2D rb;
     PlayerController inputActions;
 
+    [Header("Shooting References")]
+    [SerializeField] ObjectPoolManager poolManager;
+    [SerializeField] Transform firePoint;
+
     [Header("Inputs")]
     [SerializeField] Vector2 movement;
 
-
     private void Awake()
     {
-       inputActions = new PlayerController();
-
+        inputActions = new PlayerController();
         MovementCalling();
     }
 
@@ -37,6 +38,11 @@ public class Player : MonoBehaviour
         inputActions.Player.Disable();
     }
 
+    void Update()
+    {
+        Shoot();
+    }
+
     private void FixedUpdate()
     {
         HandleMovement();
@@ -48,4 +54,11 @@ public class Player : MonoBehaviour
         rb.MovePosition(move);
     }
 
+    void Shoot()
+    {
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            poolManager.SpawnObjects("Bullet", firePoint.position, firePoint.rotation);
+        }
+    }
 }
