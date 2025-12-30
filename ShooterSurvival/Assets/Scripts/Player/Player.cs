@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
 
     void Shoot()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetMouseButtonDown(0))
         {
             poolManager.SpawnObjects("Bullet", firePoint.position, firePoint.rotation);
         }
